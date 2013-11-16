@@ -849,14 +849,10 @@ Maze.animate = function() {
       Maze.scheduleFail(false);
       break;
     case 'left':
-      Maze.schedule([Maze.pegmanX, Maze.pegmanY, Maze.pegmanD * 4],
-                    [Maze.pegmanX, Maze.pegmanY, Maze.pegmanD * 4 - 4]);
-      Maze.pegmanD = Maze.constrainDirection4(Maze.pegmanD - 1);
+      Maze.face(Maze.pegmanD - 1);
       break;
     case 'right':
-      Maze.schedule([Maze.pegmanX, Maze.pegmanY, Maze.pegmanD * 4],
-                    [Maze.pegmanX, Maze.pegmanY, Maze.pegmanD * 4 + 4]);
-      Maze.pegmanD = Maze.constrainDirection4(Maze.pegmanD + 1);
+      Maze.face(Maze.pegmanD + 1);
       break;
     case 'finish':
       // Only schedule victory animation for certain conditions:
@@ -864,6 +860,7 @@ Maze.animate = function() {
         case BlocklyApps.TestResults.FREE_PLAY:
         case BlocklyApps.TestResults.TOO_MANY_BLOCKS_FAIL:
         case BlocklyApps.TestResults.ALL_PASS:
+          Maze.face(Direction.SOUTH);
           Maze.scheduleFinish(true);
           break;
         default:
@@ -1265,3 +1262,10 @@ Maze.checkSuccess = function() {
   }
   return false;
 };
+
+Maze.face = function(d) {
+  Maze.schedule([Maze.pegmanX, Maze.pegmanY, Maze.pegmanD * 4],
+                [Maze.pegmanX, Maze.pegmanY, d * 4]);
+  Maze.pegmanD = Maze.constrainDirection4(d);
+};
+
